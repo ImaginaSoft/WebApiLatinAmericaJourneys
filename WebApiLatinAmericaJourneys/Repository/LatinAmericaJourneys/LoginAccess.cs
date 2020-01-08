@@ -11,7 +11,7 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
     public class LoginAccess
     {
 
-        public IEnumerable<Cliente> LeerCliente(string pCorreoCliente, string pPasswordCliente)
+        public IEnumerable<ClienteResponse> LeerCliente(string pCorreoCliente, string pPasswordCliente)
         {
 
             string lineagg = "0";
@@ -19,7 +19,7 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
             try
             {
 
-                List<Cliente> lstCliente = new List<Cliente>();
+                List<ClienteResponse> lstCliente = new List<ClienteResponse>();
                 lineagg += ",1";
                 using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
                 {
@@ -41,7 +41,7 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
                         if (rdr["Email"].ToString().Trim() == pCorreoCliente.Trim() && rdr["ClaveCliente"].ToString().Trim() == pPasswordCliente.Trim())
                         {
 
-                            Cliente fcliente = new Cliente
+                            ClienteResponse fcliente = new ClienteResponse
                             {
 
                                 CodCliente = rdr["CodCliente"].ToString(),
@@ -71,6 +71,61 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
                 throw new Exception { Source = lineagg };
 
             }
+
+        }
+
+        public IEnumerable<UltimaPublicacionResponse> LeeUltimaPublicacion(int pCodCliente)
+        {
+
+            try
+            {
+
+                List<UltimaPublicacionResponse> lstPublicacion = new List<UltimaPublicacionResponse>();
+
+                using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
+                {
+
+
+                    SqlCommand cmd = new SqlCommand("peru4me_new.P4I_PublicaUltimo_S", con);
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@CodZonaVta", SqlDbType.Char, 3).Value = "PER";
+                    cmd.Parameters.Add("@CodCliente", SqlDbType.Int).Value = pCodCliente;
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        UltimaPublicacionResponse fpublicacion = new UltimaPublicacionResponse
+                        {
+
+                            NroPedido = Convert.ToInt32(rdr["NroPedido"]),
+                            NroPropuesta = Convert.ToInt32(rdr["NroPropuesta"]),
+                            NroVersion = Convert.ToInt32(rdr["NroVersion"]),
+                            FlagIdioma = Convert.ToChar(rdr["FlagIdioma"].ToString()),
+                            CantPropuestas = Convert.ToInt32(rdr["CantPropuestas"])
+
+                        };
+
+                        lstPublicacion.Add(item: fpublicacion);
+
+                    }
+
+                    con.Close();
+                }
+
+                return lstPublicacion;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+
 
         }
 
