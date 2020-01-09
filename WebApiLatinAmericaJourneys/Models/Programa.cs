@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebApiLatinAmericaJourneys.Models
 {
-    public class ProgramaResponse
+    public class Programa
     {
 
         public DateTime FchSys { get; set; }

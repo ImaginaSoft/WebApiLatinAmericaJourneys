@@ -6,7 +6,7 @@ using System.Web;
 namespace WebApiLatinAmericaJourneys.Models
 {
 
-    public class UltimaPublicacionResponse
+    public class UltimaPublicacion
     {
         public int NroPedido { get; set; }
         public int NroPropuesta { get; set; }

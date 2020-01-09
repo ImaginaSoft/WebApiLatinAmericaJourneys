@@ -13,12 +13,12 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
     public class FichaPropuestaAccess
     {
 
-        public IEnumerable<ProgramaResponse> ObtenerListadoPropuesta(int pNroPedido, char pFlagIdioma)
+        public IEnumerable<Programa> ObtenerListadoPropuesta(int pNroPedido, char pFlagIdioma)
         {
             try
             {
-                List<ProgramaResponse> lstfprograma = new List<ProgramaResponse>();
-
+                List<Programa> lstfprograma = new List<Programa>();
+                
                 using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
                 {
                     SqlCommand cmd = new SqlCommand();
@@ -52,7 +52,7 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
 
                     while (rdr.Read())
                     {
-                        ProgramaResponse fprograma = new ProgramaResponse
+                        Programa fprograma = new Programa
                         {
 
                             FchSys = Convert.ToDateTime(rdr["FchSys"].ToString()),
@@ -73,6 +73,125 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
                 }
 
                 return lstfprograma;
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<Servicio> ObtenerListadoServiciosPropuesta(int pNroPedido, int pNroPropuesta, char pFlagIdioma)
+
+        {
+            try
+            {
+                List<Servicio> lstfservicio = new List<Servicio>();
+
+                using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
+                {
+                    //SqlCommand cmd = new SqlCommand("VTA_PropuestaServicio_S_GG", con);
+                    SqlCommand cmd = new SqlCommand("peru4me_new.P4I_PropuestaServ_S", con);
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    // cmd.CommandType = CommandType.Text;
+
+                    cmd.Parameters.Add("@NroPedido", SqlDbType.Int).Value = pNroPedido;
+                    cmd.Parameters.Add("@NroPropuesta", SqlDbType.Int).Value = pNroPropuesta;
+                    cmd.Parameters.Add("@FlagIdioma", SqlDbType.Char).Value = pFlagIdioma;
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        Servicio fservicio = new Servicio
+                        {
+
+                            NroServicio = Convert.ToInt32(rdr["NroServicio"]),
+                            DesServicio = rdr["DesServicio"].ToString(),
+                            CodTipoServicio = Convert.ToInt32(rdr["CodTipoServicio"]),
+                            NroDia = rdr["NroDia"].ToString(),
+                            DesServicioDet = rdr["DesServicioDet"].ToString(),
+                            Ciudad = rdr["Ciudad"].ToString(),
+                            HoraServicio = rdr["HoraServicio"].ToString(),
+                            FchInicio = Convert.ToDateTime(rdr["FchInicio"].ToString()),
+                            NombreEjecutiva = rdr["CodUsuario"].ToString(),
+                            Resumen = rdr["Resumen"].ToString(),
+                            ResuCaraEspe = rdr["ResuCaraEspe"].ToString(),
+                            ResuComida = rdr["ResuComida"].ToString()
+                            //FchInicio = (rdr["FchInicio"] =null)? string.Empty : Convert.ToDateTime(rdr["FchInicio"].ToString())
+
+                        };
+
+                        lstfservicio.Add(item: fservicio);
+                    }
+
+                    con.Close();
+                }
+
+                return lstfservicio;
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<Servicio> ObtenerListadoServiciosPropuestaVersion(int pNroPedido, int pNroPropuesta, int pNroVersion, char pFlagIdioma)
+
+        {
+            try
+            {
+                List<Servicio> lstfservicio = new List<Servicio>();
+
+                using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
+                {
+                    //SqlCommand cmd = new SqlCommand("VTA_PropuestaServicio_S_GG", con);
+                    SqlCommand cmd = new SqlCommand("peru4me_new.P4I_PropuestaServVersion_S", con);
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    // cmd.CommandType = CommandType.Text;
+
+                    cmd.Parameters.Add("@NroPedido", SqlDbType.Int).Value = pNroPedido;
+                    cmd.Parameters.Add("@NroPropuesta", SqlDbType.Int).Value = pNroPropuesta;
+                    cmd.Parameters.Add("@NroVersion", SqlDbType.Int).Value = pNroVersion;
+                    cmd.Parameters.Add("@FlagIdioma", SqlDbType.Char).Value = pFlagIdioma;
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        Servicio fservicio = new Servicio
+                        {
+
+                            NroServicio = Convert.ToInt32(rdr["NroServicio"]),
+                            DesServicio = rdr["DesServicio"].ToString(),
+                            CodTipoServicio = Convert.ToInt32(rdr["CodTipoServicio"]),
+                            NroDia = rdr["NroDia"].ToString(),
+                            DesServicioDet = rdr["DesServicioDet"].ToString(),
+                            Ciudad = rdr["Ciudad"].ToString(),
+                            HoraServicio = rdr["HoraServicio"].ToString(),
+                            FchInicio = Convert.ToDateTime(rdr["FchInicio"].ToString()),
+                            NombreEjecutiva = rdr["CodUsuario"].ToString(),
+                            Resumen = rdr["Resumen"].ToString(),
+                            ResuCaraEspe = rdr["ResuCaraEspe"].ToString(),
+                            ResuComida = rdr["ResuComida"].ToString()
+                            //FchInicio = (rdr["FchInicio"] =null)? string.Empty : Convert.ToDateTime(rdr["FchInicio"].ToString())
+
+                        };
+
+                        lstfservicio.Add(item: fservicio);
+                    }
+
+                    con.Close();
+                }
+
+                return lstfservicio;
 
             }
             catch (Exception ex)

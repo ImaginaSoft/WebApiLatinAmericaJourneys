@@ -11,5 +11,12 @@ namespace WebApiLatinAmericaJourneys.Utility
         public const char CHR_IDIOMA_ESPAÑOL = 'E';
 
         public const string strSecureAppSettings = "secureAppSettings";
+
+        public const string STR_ESTADO_PROGRAMA_I = "Sold";
+
+        public const string STR_ESTADO_PROGRAMA_E = "Vendido";
+
     }
+
+
 }

@@ -36,7 +36,7 @@ namespace WebApiLatinAmericaJourneys.Controllers
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
             //TODO: Validate credentials Correctly, this code is only for demo !!
-            bool isCredentialValid = (login.Password == "123456");
+            bool isCredentialValid = (login.Password == "Pentagrama2020$");
             if (isCredentialValid)
             {
                 var token = TokenGenerator.GenerateTokenJwt(login.Username);

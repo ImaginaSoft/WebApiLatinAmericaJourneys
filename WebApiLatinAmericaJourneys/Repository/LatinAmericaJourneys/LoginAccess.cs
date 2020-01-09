@@ -74,13 +74,13 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
 
         }
 
-        public IEnumerable<UltimaPublicacionResponse> LeeUltimaPublicacion(int pCodCliente)
+        public IEnumerable<UltimaPublicacion> LeeUltimaPublicacion(int pCodCliente)
         {
 
             try
             {
 
-                List<UltimaPublicacionResponse> lstPublicacion = new List<UltimaPublicacionResponse>();
+                List<UltimaPublicacion> lstPublicacion = new List<UltimaPublicacion>();
 
                 using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
                 {
@@ -98,7 +98,7 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
 
                     while (rdr.Read())
                     {
-                        UltimaPublicacionResponse fpublicacion = new UltimaPublicacionResponse
+                        UltimaPublicacion fpublicacion = new UltimaPublicacion
                         {
 
                             NroPedido = Convert.ToInt32(rdr["NroPedido"]),
