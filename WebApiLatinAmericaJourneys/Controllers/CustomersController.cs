@@ -7,6 +7,10 @@ using System.Web.Script.Serialization;
 using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using CustomLog;
+
 
 namespace WebApiLatinAmericaJourneys.Controllers
 {
@@ -56,7 +60,11 @@ namespace WebApiLatinAmericaJourneys.Controllers
             else
             {
                 objClienteRS.LoginSuccess = false;
-
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("No se encontro el cliente.")
+                };
+                throw new HttpResponseException(message);
             }
 
 
@@ -77,26 +85,45 @@ namespace WebApiLatinAmericaJourneys.Controllers
 
             TourResponse objTourResponse = new TourResponse();
 
-            var lstPublicacion = objLogin.LeeUltimaPublicacion(Convert.ToInt32(objClienteRQ.CodigoCliente));
-            var lstProgramaGG = objFichaPropuesta.ObtenerListadoPropuesta(lstPublicacion.FirstOrDefault().NroPedido, lstPublicacion.FirstOrDefault().FlagIdioma);
-            var lstProgramaVendido = lstProgramaGG.Where(p => p.StsPrograma.Equals(ConstantesWeb.STR_ESTADO_PROGRAMA_I) || p.StsPrograma.Equals(ConstantesWeb.STR_ESTADO_PROGRAMA_E));
+            try {
+                var lstPublicacion = objLogin.LeeUltimaPublicacion(Convert.ToInt32(objClienteRQ.CodigoCliente));
+                var lstProgramaGG = objFichaPropuesta.ObtenerListadoPropuesta(lstPublicacion.FirstOrDefault().NroPedido, lstPublicacion.FirstOrDefault().FlagIdioma);
+                var lstProgramaVendido = lstProgramaGG.Where(p => p.StsPrograma.Equals(ConstantesWeb.STR_ESTADO_PROGRAMA_I) || p.StsPrograma.Equals(ConstantesWeb.STR_ESTADO_PROGRAMA_E));
+
+                if (lstProgramaVendido.Count() <=0) {
+                    var message = new HttpResponseMessage(HttpStatusCode.BadRequest) {
+
+                        Content = new StringContent("No hay un programa vendido.")
+
+                    };
+                    throw new HttpResponseException(message);
+                }
+
+                string nroPedido = lstProgramaVendido.FirstOrDefault().KeyReg.Substring(0, 6);
+                string nroPropuesta = lstProgramaVendido.FirstOrDefault().KeyReg.Substring(8, 2);
+                string nroVersion = lstProgramaVendido.FirstOrDefault().KeyReg.Substring(10, 2);
 
 
-            string nroPedido = lstProgramaVendido.FirstOrDefault().KeyReg.Substring(0, 6);
-            string nroPropuesta = lstProgramaVendido.FirstOrDefault().KeyReg.Substring(8, 2);
-            string nroVersion = lstProgramaVendido.FirstOrDefault().KeyReg.Substring(10, 2);
+                lstPropuestaDetalle = VerPropuestaDetalle(lstProgramaVendido.FirstOrDefault().NroPrograma, nroPedido, nroPropuesta, nroVersion, lstPublicacion.FirstOrDefault().FlagIdioma);
+
+                objTourResponse.CabeceraTour = lstProgramaGG.Where(p => p.StsPrograma.Equals(ConstantesWeb.STR_ESTADO_PROGRAMA_I) || p.StsPrograma.Equals(ConstantesWeb.STR_ESTADO_PROGRAMA_E)).ToList();
+                objTourResponse.DetalleTour = lstPropuestaDetalle;
+
+                var json = new JavaScriptSerializer().Serialize(objTourResponse);
+                string output = JsonConvert.SerializeObject(objTourResponse);
 
 
-            lstPropuestaDetalle = VerPropuestaDetalle(lstProgramaVendido.FirstOrDefault().NroPrograma, nroPedido, nroPropuesta, nroVersion, lstPublicacion.FirstOrDefault().FlagIdioma);
+                return Ok(output);
+            }
+            catch (HttpResponseException ex) {
 
-            objTourResponse.CabeceraTour = lstProgramaGG.Where(p => p.StsPrograma.Equals(ConstantesWeb.STR_ESTADO_PROGRAMA_I) || p.StsPrograma.Equals(ConstantesWeb.STR_ESTADO_PROGRAMA_E)).ToList();
-            objTourResponse.DetalleTour = lstPropuestaDetalle;
+                //Bitacora.Current.Error<CustomersController>(ex, new { "g" });
+                throw;
+                
+            }
 
-            var json = new JavaScriptSerializer().Serialize(objTourResponse);
-            string output = JsonConvert.SerializeObject(objTourResponse);
 
 
-            return Ok(output);
         }
 
         public List<Servicio> VerPropuestaDetalle(string pNroPrograma, string pNroPedido, string pNroPropuesta, string pNroVersion, char pFlagIdioma)
