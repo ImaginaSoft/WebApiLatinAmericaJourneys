@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Web.Http;
 using WebApiLatinAmericaJourneys.Models;
+using Newtonsoft.Json;
+
 
 using WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys;
 
@@ -19,6 +21,7 @@ namespace WebApiLatinAmericaJourneys.Controllers
         }
 
         [HttpGet]
+        [Route("demo")]
         public IHttpActionResult GetAll()
         {
             var customersFake = new string[] { "customer-1", "customer-2", "customer-3", "customer-4" };
@@ -46,5 +49,30 @@ namespace WebApiLatinAmericaJourneys.Controllers
             return Ok(estado);
 
         }
+
+
+        [HttpGet]
+        [Route("Propuesta")]
+        public IHttpActionResult GetPropuesta(EPropuesta Pro) 
+        {
+            LPropuesta objPropuesta = new LPropuesta();
+            var lstPropuesta = objPropuesta.LeerPropuesta(Pro.EmailCliente, Pro.PasswordCliente,Pro.ZontaVenta);
+            
+            return Ok(lstPropuesta.ToList());
+        
+        }
+
+        [HttpGet]
+        [Route("Itinerario")]
+        public IHttpActionResult GetItinerario(EItinerario Iti)
+        {
+            LItinerario objItinerario = new LItinerario();
+            var lstItinerario = objItinerario.LeerItinerario(Iti.NroPedido, Iti.NroPropuesta,Iti.NroVersion);
+
+            return Ok(lstItinerario.ToList());
+
+        }
+
+
     }
 }
