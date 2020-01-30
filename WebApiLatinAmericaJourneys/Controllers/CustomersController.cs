@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 
 
 using WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys;
+using System.Net.Http;
+using System.Net;
 
 namespace WebApiLatinAmericaJourneys.Controllers
 {
@@ -32,21 +34,32 @@ namespace WebApiLatinAmericaJourneys.Controllers
         [Route("login")]
         public IHttpActionResult LoginCliente(ClienteRequest cli) {
 
+            ClienteResponse objClienteRS = new ClienteResponse();
+
             LoginAccess objLogin = new LoginAccess();
             var lstCliente = objLogin.LeerCliente(cli.EmailCliente, cli.PasswordCliente);
-            bool estado;
 
             if (lstCliente.Count() > 0)
             {
-                estado = true;
-
+                objClienteRS.LoginSuccess = true;
+                objClienteRS.CodCliente = lstCliente.FirstOrDefault().CodCliente;
+                objClienteRS.EmailCliente = lstCliente.FirstOrDefault().EmailCliente.Trim();
+                objClienteRS.NomCliente = lstCliente.FirstOrDefault().NomCliente;
+                objClienteRS.ApePaterno = lstCliente.FirstOrDefault().ApePaterno;
+                objClienteRS.ApeMaterno = lstCliente.FirstOrDefault().ApeMaterno;
+                objClienteRS.TipoIdioma = lstCliente.FirstOrDefault().TipoIdioma;
             }
             else
             {
-                estado = false;
+                objClienteRS.LoginSuccess = false;
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("No se encontro el cliente.")
+                };
+                throw new HttpResponseException(message);
             }
 
-            return Ok(estado);
+            return Ok(objClienteRS);
 
         }
 

@@ -14,5 +14,6 @@ namespace WebApiLatinAmericaJourneys.Models
         public string ApePaterno { get; set; }
         public string ApeMaterno { get; set; }
         public string EmailCliente { get; set; }
+        public char TipoIdioma { get; set; }
     }
 }

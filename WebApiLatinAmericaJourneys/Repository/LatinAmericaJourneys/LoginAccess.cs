@@ -48,7 +48,8 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
                                 NomCliente = rdr["NomCliente"].ToString(),
                                 ApePaterno = rdr["Paterno"].ToString(),
                                 ApeMaterno = rdr["Materno"].ToString(),
-                                EmailCliente = rdr["Email"].ToString()
+                                EmailCliente = rdr["Email"].ToString(),
+                                TipoIdioma = Convert.ToChar( rdr["TipoIdioma"])
 
                             };
 
