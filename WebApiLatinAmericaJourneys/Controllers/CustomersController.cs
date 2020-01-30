@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using CustomLog;
-
+using Newtonsoft.Json.Serialization;
 
 namespace WebApiLatinAmericaJourneys.Controllers
 {
@@ -37,29 +37,55 @@ namespace WebApiLatinAmericaJourneys.Controllers
             var customersFake = new string[] { "customer-1", "customer-2", "customer-3", "customer-4" };
             return Ok(customersFake);
         }
+        protected string Stringify(object obj, bool indented = false)
+        {
+            try
+            {
+                var settings = new JsonSerializerSettings
+                {
+                    Formatting = indented ? Formatting.Indented : Formatting.None,
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                };
+                return JsonConvert.SerializeObject(obj, settings);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
+      
         [HttpGet]
         [Route("login")]
         public IHttpActionResult LoginCliente(ClienteRequest objClienteRQ)
         {
 
-            ClienteResponse objClienteRS = new ClienteResponse();
+            //ClienteResponse objClienteRS = new ClienteResponse()
             LoginAccess objLogin = new LoginAccess();
             var lstCliente = objLogin.LeerCliente(objClienteRQ.EmailCliente, objClienteRQ.PasswordCliente);
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            string jsonData = string.Empty;
 
             if (lstCliente.Count() > 0)
             {
-                objClienteRS.LoginSuccess = true;
-                objClienteRS.CodCliente = lstCliente.FirstOrDefault().CodCliente;
-                objClienteRS.EmailCliente = lstCliente.FirstOrDefault().EmailCliente.Trim();
-                objClienteRS.NomCliente = lstCliente.FirstOrDefault().NomCliente;
-                objClienteRS.ApePaterno = lstCliente.FirstOrDefault().ApePaterno;
-                objClienteRS.ApeMaterno = lstCliente.FirstOrDefault().ApeMaterno;
+
+                ClienteResponse objClienteRS = new ClienteResponse()
+                {
+                        LoginSuccess = true,
+                        CodCliente = lstCliente.FirstOrDefault().CodCliente,
+                        EmailCliente = lstCliente.FirstOrDefault().EmailCliente.Trim(),
+                        NomCliente = lstCliente.FirstOrDefault().NomCliente,
+                        ApePaterno = lstCliente.FirstOrDefault().ApePaterno,
+                        ApeMaterno = lstCliente.FirstOrDefault().ApeMaterno
+                };
+
+                //jsonData = js.Serialize(objClienteRS);
+
+                jsonData = Stringify(objClienteRS,true);
 
             }
             else
             {
-                objClienteRS.LoginSuccess = false;
                 var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
                     Content = new StringContent("No se encontro el cliente.")
@@ -68,9 +94,9 @@ namespace WebApiLatinAmericaJourneys.Controllers
             }
 
 
-            var json = new JavaScriptSerializer().Serialize(objClienteRS);
+            //var json = new JavaScriptSerializer().Serialize(objClienteRS);
 
-            return Ok(json);
+            return Ok(jsonData);
 
         }
 
