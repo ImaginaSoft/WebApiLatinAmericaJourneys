@@ -12,13 +12,13 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
     public class LPropuesta
     {
 
-        public IEnumerable<EPropuesta> LeerPropuesta(string pCorreoCliente, string pPasswordCliente, string pZonaVenta)
+        public IEnumerable<PropuestaResponse> LeerPropuesta(int pCodCliente, string pZonaVenta)
         {
             string lineagg = "0";
 
             try
             {
-                List<EPropuesta> lstPropuesta = new List<EPropuesta>();
+                List<PropuestaResponse> lstPropuesta = new List<PropuestaResponse>();
                 lineagg += ",1";
                 using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
                 {
@@ -26,8 +26,7 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
                     SqlCommand cmd = new SqlCommand("latinamericajourneys.LAJ_Propuesta_S", con);
 
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@CorreoCliente", SqlDbType.VarChar).Value = pCorreoCliente;
-                    cmd.Parameters.Add("@PasswordCliente", SqlDbType.VarChar).Value = pPasswordCliente;
+                    cmd.Parameters.Add("@CodCliente", SqlDbType.Int).Value = pCodCliente;
                     cmd.Parameters.Add("@CodZonaVta", SqlDbType.Char).Value = pZonaVenta;
 
                     lineagg += ",2";
@@ -38,9 +37,8 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
                     while (rdr.Read())
                     {
                         lineagg += ",4";
-                        //if (rdr["Email"].ToString().Trim() == pCorreoCliente.Trim() && rdr["ClaveCliente"].ToString().Trim() == pPasswordCliente.Trim())
-                        //{
-                            EPropuesta fPropuesta = new EPropuesta
+                        
+                            PropuestaResponse fPropuesta = new PropuestaResponse
                             {
                                 FchSys         = rdr["FchSys"].ToString(),
                                 FchInicio      = rdr["FchInicio"].ToString(),
@@ -57,7 +55,7 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
 
                         lstPropuesta.Add(item: fPropuesta);
 
-                        //}
+                         
                     }
                     lineagg += ",5";
                     con.Close();

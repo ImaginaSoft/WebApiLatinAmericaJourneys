@@ -107,7 +107,8 @@
     <Compile Include="Models\ClienteRequest.cs" />
     <Compile Include="Models\ClienteResponse.cs" />
     <Compile Include="Models\EItinerario.cs" />
-    <Compile Include="Models\EPropuesta.cs" />
+    <Compile Include="Models\PropuestaRequest.cs" />
+    <Compile Include="Models\PropuestaResponse.cs" />
     <Compile Include="Models\LoginRequest.cs" />
     <Compile Include="Models\Programa.cs" />
     <Compile Include="Models\Servicio.cs" />

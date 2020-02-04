@@ -2,11 +2,11 @@
 using System.Web.Http;
 using WebApiLatinAmericaJourneys.Models;
 using Newtonsoft.Json;
-
-
 using WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys;
 using System.Net.Http;
 using System.Net;
+using System;
+using System.Collections.Generic;
 
 namespace WebApiLatinAmericaJourneys.Controllers
 {
@@ -65,24 +65,53 @@ namespace WebApiLatinAmericaJourneys.Controllers
 
 
         [HttpGet]
-        [Route("Propuesta")]
-        public IHttpActionResult GetPropuesta(EPropuesta Pro) 
+        [Route("GetPropuesta")]
+        public IHttpActionResult GetPropuesta(PropuestaRequest Pro) 
         {
             LPropuesta objPropuesta = new LPropuesta();
-            var lstPropuesta = objPropuesta.LeerPropuesta(Pro.EmailCliente, Pro.PasswordCliente,Pro.ZontaVenta);
+            var lstPropuesta = objPropuesta.LeerPropuesta(Convert.ToInt32(Pro.CodCliente), Pro.ZontaVenta);
+
+            if (lstPropuesta.Count() > 0)
+            {
+                return Ok(lstPropuesta.ToList());
+            }
+            else
+            {
+               
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("No se encontro la Propuesta.")
+                };
+                throw new HttpResponseException(message);
+            }
+
             
-            return Ok(lstPropuesta.ToList());
-        
+
         }
 
         [HttpGet]
-        [Route("Itinerario")]
+        [Route("GetItinerario")]
         public IHttpActionResult GetItinerario(EItinerario Iti)
         {
             LItinerario objItinerario = new LItinerario();
             var lstItinerario = objItinerario.LeerItinerario(Iti.NroPedido, Iti.NroPropuesta,Iti.NroVersion);
 
-            return Ok(lstItinerario.ToList());
+            if (lstItinerario.Count() > 0)
+            {
+
+                return Ok(lstItinerario.ToList());
+
+            }
+            else
+            {
+
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("No se encontro el Itinerario.")
+                };
+                throw new HttpResponseException(message);
+            }
+            
 
         }
 

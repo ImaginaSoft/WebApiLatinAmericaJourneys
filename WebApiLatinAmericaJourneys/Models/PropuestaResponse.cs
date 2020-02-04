@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebApiLatinAmericaJourneys.Models
 {
-    public class EPropuesta
+    public class PropuestaResponse
     {
         public string FchSys { get; set; }
         public string FchInicio { get; set; }
@@ -18,9 +18,6 @@ namespace WebApiLatinAmericaJourneys.Models
         public string NroPedido { get; set; }
         public string NroPropuesta { get; set; }
         public string NroVersion { get; set; }
-        public string EmailCliente { get; set; }
-        public string PasswordCliente { get; set; }
-        public string ZontaVenta { get; set; }
 
     }
 }
