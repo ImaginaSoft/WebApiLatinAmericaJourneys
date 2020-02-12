@@ -32,15 +32,27 @@ namespace WebApiLatinAmericaJourneys.Controllers
         [Route("authenticate")]
         public IHttpActionResult Authenticate(LoginRequest login)
         {
+
+            List<TokenResponse> lstToken = new List<TokenResponse>();
+
+
             if (login == null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            //TODO: Validate credentials Correctly, this code is only for demo !!
             bool isCredentialValid = (login.Password == "Pentagrama2020$" || login.Password=="PentagramaLocal$");
             if (isCredentialValid)
             {
                 var token = TokenGenerator.GenerateTokenJwt(login.Username);
-                return Ok(token);
+
+                TokenResponse fToken = new TokenResponse
+                {
+                    tokenJWT = token
+                };
+
+                lstToken.Add(item: fToken);
+
+
+                return Ok(lstToken);
             }
             else
             {
