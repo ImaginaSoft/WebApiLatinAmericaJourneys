@@ -52,7 +52,8 @@ namespace WebApiLatinAmericaJourneys.Controllers
                 lstToken.Add(item: fToken);
 
 
-                return Ok(lstToken);
+
+                return Ok(lstToken.FirstOrDefault());
             }
             else
             {
