@@ -130,6 +130,188 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
 
         }
 
+        public IEnumerable<ClienteResponse> LeerCorreo(string pCorreoCliente)
+        {
+
+            string lineagg = "0";
+
+            try
+            {
+
+                List<ClienteResponse> lstCliente = new List<ClienteResponse>();
+                lineagg += ",1";
+                using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
+                {
+
+                    SqlCommand cmd = new SqlCommand("latinamericajourneys.LAJ_LeeCorreo_S", con);
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@CorreoCliente", SqlDbType.VarChar).Value = pCorreoCliente;
+
+                    lineagg += ",2";
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    lineagg += ",3";
+                    while (rdr.Read())
+                    {
+                        lineagg += ",4";
+                        if (rdr["Email"].ToString().Trim() == pCorreoCliente.Trim())
+                        {
+
+                            ClienteResponse fcliente = new ClienteResponse
+                            {
+                                CodCliente = rdr["CodCliente"].ToString(),
+                                NomCliente = rdr["NomCliente"].ToString(),
+                                ApePaterno = rdr["Paterno"].ToString(),
+                                ApeMaterno = rdr["Materno"].ToString(),
+                                EmailCliente = rdr["Email"].ToString(),
+                                TipoIdioma = Convert.ToChar(rdr["TipoIdioma"]),
+                                ClaveCliente = rdr["ClaveCliente"].ToString()
+                                
+                            };
+
+                            lstCliente.Add(item: fcliente);
+
+                        }
+
+                    }
+                    lineagg += ",5";
+                    con.Close();
+                }
+
+                return lstCliente;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception { Source = lineagg };
+
+            }
+
+        }
+
+        public IEnumerable<ClienteResponse> LeeIDCliente(int pCodCliente)
+        {
+
+            string lineagg = "0";
+
+            try
+            {
+
+                List<ClienteResponse> lstCliente = new List<ClienteResponse>();
+                lineagg += ",1";
+                using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
+                {
+
+                    SqlCommand cmd = new SqlCommand("latinamericajourneys.LAJ_LeeIDCliente_S", con);
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@CodCliente", SqlDbType.VarChar).Value = pCodCliente;
+                    
+                    lineagg += ",2";
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    lineagg += ",3";
+                    while (rdr.Read())
+                    {
+                        lineagg += ",4";
+                       
+
+                            ClienteResponse fcliente = new ClienteResponse
+                            {
+
+                                IDCliente = rdr["IDCliente"].ToString()
+                               
+
+                            };
+
+                            lstCliente.Add(item: fcliente);
+
+                        
+
+                    }
+                    lineagg += ",5";
+                    con.Close();
+                }
+
+                return lstCliente;
+
+            }
+            catch (Exception ex)
+            {
+                
+                throw new Exception { Source = lineagg };
+
+            }
+
+
+        }
+
+        public IEnumerable<PlantillaTourResponse> LeeImageTour(int pNroPedido,int pNroPropuesta, int pNroVersion )
+        {
+
+            string lineagg = "0";
+
+            try
+            {
+
+                List<PlantillaTourResponse> lstPlantillaTour = new List<PlantillaTourResponse>();
+                lineagg += ",1";
+                using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
+                {
+
+                    SqlCommand cmd = new SqlCommand("latinamericajourneys.LAJ_ImagenTour_S", con);
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@NroPedido", SqlDbType.Int).Value = pNroPedido;
+                    cmd.Parameters.Add("@NroPropuesta", SqlDbType.Int).Value = pNroPropuesta;
+                    cmd.Parameters.Add("@NroVersion", SqlDbType.Int).Value = pNroVersion;
+                    lineagg += ",2";
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    lineagg += ",3";
+                    while (rdr.Read())
+                    {
+                        lineagg += ",4";
+
+
+                        PlantillaTourResponse fPlantillaTour = new PlantillaTourResponse
+                        {
+
+                            NroPlantilla = rdr["NroPlantilla"].ToString(),
+                            IdImg = rdr["NroPlantilla"].ToString(),
+                            Imagen = rdr["Imagen"].ToString(),
+                            StrURL = rdr["StrURL"].ToString(),
+                            Calificacion = rdr["Calificacion"].ToString()
+
+                        };
+
+                        lstPlantillaTour.Add(item: fPlantillaTour);
+
+
+
+                    }
+                    lineagg += ",5";
+                    con.Close();
+                }
+
+                return lstPlantillaTour;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception { Source = lineagg };
+
+            }
+
+
+        }
+
+       
 
 
     }

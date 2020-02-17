@@ -57,6 +57,8 @@
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.6.0\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -92,11 +94,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Connected Services\ws_SendGridEmail\WebApiLatinAmericaJourneys.ws_SendGridEmail.EnviarCorreoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\ws_SendGridEmail\WebApiLatinAmericaJourneys.ws_SendGridEmail.Respuesta.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\ws_SendGridEmail\wsMails.disco" />
+    <None Include="Connected Services\ws_SendGridEmail\configuration91.svcinfo" />
+    <None Include="Connected Services\ws_SendGridEmail\configuration.svcinfo" />
+    <None Include="Connected Services\ws_SendGridEmail\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Connected Services\ws_SendGridEmail\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\TokenGenerator.cs" />
@@ -104,9 +124,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AccesoRequest.cs" />
+    <Compile Include="Models\AlbumRequest.cs" />
     <Compile Include="Models\ClienteRequest.cs" />
     <Compile Include="Models\ClienteResponse.cs" />
     <Compile Include="Models\EItinerario.cs" />
+    <Compile Include="Models\PlantillaTourRequest.cs" />
+    <Compile Include="Models\PlantillaTourResponse.cs" />
     <Compile Include="Models\PropuestaRequest.cs" />
     <Compile Include="Models\PropuestaResponse.cs" />
     <Compile Include="Models\LoginRequest.cs" />
@@ -119,8 +143,10 @@
     <Compile Include="Repository\LatinAmericaJourneys\LItinerario.cs" />
     <Compile Include="Repository\LatinAmericaJourneys\LoginAccess.cs" />
     <Compile Include="Repository\LatinAmericaJourneys\LPropuesta.cs" />
+    <Compile Include="Repository\LatinAmericaJourneys\RespuestaEmail.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Connected Services\ws_SendGridEmail\wsMails.wsdl" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Web.Debug.config">
@@ -132,6 +158,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Public\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\ws_SendGridEmail\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

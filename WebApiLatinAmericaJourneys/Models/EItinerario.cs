@@ -22,6 +22,7 @@ namespace WebApiLatinAmericaJourneys.Models
         public string NroOrden { get; set; }
         public string KeyReg { get; set; }
         public string CodUsuario { get; set; }
+        public string Notificacion { get; set; }
         public string NroPedido { get; set; }
         public string NroPropuesta { get; set; }
         public string NroVersion { get; set; }

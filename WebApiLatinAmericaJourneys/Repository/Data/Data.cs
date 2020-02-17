@@ -55,7 +55,12 @@ namespace WebApiLatinAmericaJourneys.Repository.Data
             //}
         }
 
+        public static string StrUrl
+        {
 
+            get { return ((NameValueCollection)WebConfigurationManager.GetSection(strSecureAppSettings))[("URL_perutourism_new")]; }
+
+        }
 
     }
 }

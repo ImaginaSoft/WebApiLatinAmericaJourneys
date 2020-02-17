@@ -56,7 +56,8 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
                                 NroDia = rdr["NroDia"].ToString(),
                                 NroOrden = rdr["NroOrden"].ToString(),
                                 KeyReg = rdr["KeyReg"].ToString(),
-                                CodUsuario = rdr["CodUsuario"].ToString()
+                                CodUsuario = rdr["CodUsuario"].ToString(),
+                                Notificacion = rdr["Notificacion"].ToString()
                             };
 
                             lstItinerario.Add(item: fitinerario);
