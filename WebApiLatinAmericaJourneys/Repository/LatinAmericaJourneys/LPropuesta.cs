@@ -69,5 +69,61 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
 
         }
 
+
+        public IEnumerable<ProgramaViaje> LeerPropuestaViaje(int pCodCliente)
+        {
+            string lineagg = "0";
+
+            try
+            {
+                List<ProgramaViaje> lstPropuesta = new List<ProgramaViaje>();
+                lineagg += ",1";
+                using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
+                {
+
+                    SqlCommand cmd = new SqlCommand("latinamericajourneys.LAJ_Propuesta2_S", con);
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@CodCliente", SqlDbType.Int).Value = pCodCliente;
+
+                    lineagg += ",2";
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    lineagg += ",3";
+                    while (rdr.Read())
+                    {
+                        lineagg += ",4";
+
+                        ProgramaViaje fPropuesta = new ProgramaViaje
+                        {
+
+                            FchInicio = rdr["FchInicio"].ToString(),
+                            NroPrograma = rdr["NroPrograma"].ToString(),
+                            DesPrograma = rdr["DesPrograma"].ToString(),
+                            CantDias = rdr["CantDias"].ToString(),
+                            EmailVendedor = rdr["EmailVendedor"].ToString(),
+                            NroPedido = rdr["NroPedido"].ToString(),
+                            NroPropuesta = rdr["NroPropuesta"].ToString(),
+                            NroVersion = rdr["NroVersion"].ToString(),
+                            Stars = rdr["Stars"].ToString()
+                        };
+
+                        lstPropuesta.Add(item: fPropuesta);
+
+
+                    }
+                    lineagg += ",5";
+                    con.Close();
+                }
+                return lstPropuesta;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception { Source = lineagg };
+            }
+
+        }
+
     }
 }

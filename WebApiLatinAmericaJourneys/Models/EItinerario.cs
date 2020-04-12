@@ -28,4 +28,43 @@ namespace WebApiLatinAmericaJourneys.Models
         public string NroVersion { get; set; }
 
     }
+
+    public class ProgramaViaje
+    {
+        public string FchInicio { get; set; }
+        public string NroPrograma { get; set; }
+        public string DesPrograma { get; set; }
+        public string CantDias { get; set; }
+        public string EmailVendedor { get; set; }
+        public string NroPedido { get; set; }
+        public string NroPropuesta { get; set; }
+        public string NroVersion { get; set; }
+        public string Stars { get; set; }
+    }
+
+    public class Banner
+    {
+        public string StrURL { get; set; }
+    }
+
+    public class Actividades
+    {
+        public string Hora { get; set; }
+        public string Descripcion { get; set; }
+    }
+
+    public class Lugares
+    {
+        public string Lugar { get; set; }
+        public List<Actividades> Actividades { get; set; }
+    }
+
+    public class ItinerarioViaje
+    {
+        public string AnioInicio { get; set; }
+        public string MesInicio { get; set; }
+        public string DiaInicio { get; set; }
+        public List<Lugares> Lugares { get; set; }
+    }
+
 }
