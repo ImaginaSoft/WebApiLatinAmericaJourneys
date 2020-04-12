@@ -311,7 +311,59 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
 
         }
 
-       
+        public IEnumerable<Banner> LeeImage(int pNroPedido, int pNroPropuesta, int pNroVersion)
+        {
+
+            string lineagg = "0";
+
+            try
+            {
+
+                List<Banner> lstPlantillaTour = new List<Banner>();
+                lineagg += ",1";
+                using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
+                {
+
+                    SqlCommand cmd = new SqlCommand("latinamericajourneys.LAJ_ImagenTour_S", con);
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@NroPedido", SqlDbType.Int).Value = pNroPedido;
+                    cmd.Parameters.Add("@NroPropuesta", SqlDbType.Int).Value = pNroPropuesta;
+                    cmd.Parameters.Add("@NroVersion", SqlDbType.Int).Value = pNroVersion;
+                    lineagg += ",2";
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    lineagg += ",3";
+                    while (rdr.Read())
+                    {
+                        lineagg += ",4";
+
+
+                        Banner fPlantillaTour = new Banner
+                        {
+                            StrURL = rdr["StrURL"].ToString()
+                        };
+
+                        lstPlantillaTour.Add(item: fPlantillaTour);
+
+                    }
+                    lineagg += ",5";
+                    con.Close();
+                }
+
+                return lstPlantillaTour;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception { Source = lineagg };
+
+            }
+
+
+        }
 
 
     }
