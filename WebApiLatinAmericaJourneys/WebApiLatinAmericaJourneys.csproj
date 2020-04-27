@@ -124,8 +124,20 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ModelsWallet\NuevoViajeResponse.cs" />
+    <Compile Include="ModelsWallet\NuevoViajeRequest.cs" />
+    <Compile Include="ModelsWallet\EncuestaResponse.cs" />
+    <Compile Include="ModelsWallet\EncuestaRequest.cs" />
+    <Compile Include="ModelsWallet\BeneficiosResponse.cs" />
+    <Compile Include="ModelsWallet\BeneficiosRequest.cs" />
+    <Compile Include="ModelsWallet\WalletResponse.cs" />
+    <Compile Include="ModelsWallet\WalletRequest.cs" />
+    <Compile Include="ModelsWallet\LoginWRequest.cs" />
+    <Compile Include="ModelsWallet\LoginWResponse.cs" />
     <Compile Include="Models\AccesoRequest.cs" />
     <Compile Include="Models\AlbumRequest.cs" />
+    <Compile Include="Models\CalificaResponse.cs" />
+    <Compile Include="Models\CalificaRequest.cs" />
     <Compile Include="Models\ClienteRequest.cs" />
     <Compile Include="Models\ClienteResponse.cs" />
     <Compile Include="Models\EItinerario.cs" />
@@ -145,8 +157,14 @@
     <Compile Include="Repository\LatinAmericaJourneys\FichaPropuestaAccess.cs" />
     <Compile Include="Repository\LatinAmericaJourneys\LItinerario.cs" />
     <Compile Include="Repository\LatinAmericaJourneys\LoginAccess.cs" />
+    <Compile Include="Repository\LatinAmericaJourneys\LCalifica.cs" />
     <Compile Include="Repository\LatinAmericaJourneys\LPropuesta.cs" />
     <Compile Include="Repository\LatinAmericaJourneys\RespuestaEmail.cs" />
+    <Compile Include="Repository\Wallet\LNuevoViaje.cs" />
+    <Compile Include="Repository\Wallet\LEncuesta.cs" />
+    <Compile Include="Repository\Wallet\LBeneficios.cs" />
+    <Compile Include="Repository\Wallet\LWallet.cs" />
+    <Compile Include="Repository\Wallet\Llogin.cs" />
     <Compile Include="Utility\ConstantesWeb.cs" />
   </ItemGroup>
   <ItemGroup>
