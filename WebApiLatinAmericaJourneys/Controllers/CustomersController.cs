@@ -392,10 +392,101 @@ namespace WebApiLatinAmericaJourneys.Controllers
         }
 
 
+        [HttpPost]
+        [Route("GetWallet")]
+        public IHttpActionResult GetWallet(WalletRequest Wall)
+        {
+            LWallet objWallet = new LWallet();
+            
+            var lstWallet = objWallet.LeerWallet(Wall.User_id);
 
+            if (lstWallet.Count() > 0)
+            {
+                return Ok(lstWallet);
+            }
+            else
+            {
 
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("No se encontra los movimientos registrados.")
+                };
+                throw new HttpResponseException(message);
+            }
 
+        }
 
+        [HttpPost]
+        [Route("GetBeneficios")]
+        public IHttpActionResult GetBeneficios(BeneficiosRequest Ben)
+        {
+            LBeneficios objBeneficios = new LBeneficios();
+
+            var lstBeneficios = objBeneficios.LeerBeneficios(Ben.User_id);
+
+            if (lstBeneficios.Count() > 0)
+            {
+                return Ok(lstBeneficios);
+            }
+            else
+            {
+
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("No se encontra Los Beneficios registrados.")
+                };
+                throw new HttpResponseException(message);
+            }
+
+        }
+
+        [HttpPost]
+        [Route("GetEncuesta")]
+        public IHttpActionResult GetEncuesta(EncuestaRequest Enc)
+        {
+            LEncuesta objEncuesta = new LEncuesta();
+
+            var lstEncuestas = objEncuesta.LeerEncuesta(Enc.User_id,Enc.Pregunta,Enc.Respuesta);
+
+            if (lstEncuestas.Count() > 0)
+            {
+                return Ok(lstEncuestas);
+            }
+            else
+            {
+
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("No se encontra Los Beneficios registrados.")
+                };
+                throw new HttpResponseException(message);
+            }
+
+        }
+
+        [HttpPost]
+        [Route("GetNuevoViaje")]
+        public IHttpActionResult GetNuevoViaje(NuevoViajeRequest Nev)
+        {
+            LNuevoViaje objNuevoViaje = new LNuevoViaje();
+
+            var lstNuevoViaje = objNuevoViaje.LeerNuevoViaje(Nev.User_id, Nev.Planes, Nev.Fecha,Nev.Nombre,Nev.Edad);
+
+            if (lstNuevoViaje.Count() > 0)
+            {
+                return Ok(lstNuevoViaje);
+            }
+            else
+            {
+
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("No se encontra Los Beneficios registrados.")
+                };
+                throw new HttpResponseException(message);
+            }
+
+        }
 
 
 
