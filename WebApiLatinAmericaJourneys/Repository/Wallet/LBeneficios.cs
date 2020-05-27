@@ -21,9 +21,9 @@ namespace WebApiLatinAmericaJourneys.Repository.Wallet
                 using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
                 {
 
-                    SqlCommand cmd = new SqlCommand("latinamericajourneys.LAJ_Beneficios_S", con);
+                    SqlCommand cmd = new SqlCommand("dbo.APP_ObtieneBeneficio_S", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@User_id", SqlDbType.VarChar).Value = pUser_id;
+                    cmd.Parameters.Add("@CodCliente", SqlDbType.VarChar).Value = pUser_id;
                     
                     lineagg += ",2";
                     con.Open();
@@ -35,9 +35,9 @@ namespace WebApiLatinAmericaJourneys.Repository.Wallet
                         lineagg += ",4";
                         Beneficios fBeneficio = new Beneficios();
 
-                        fBeneficio.Titulo = rdr["Titulo"].ToString();
-                        fBeneficio.Descripcion = rdr["Descripcion"].ToString();
-                        fBeneficio.Condicion = rdr["Condicion"].ToString();
+                        fBeneficio.Titulo = rdr["TITULOBENEFICIO"].ToString();
+                        fBeneficio.Descripcion = rdr["DESCRIPCION"].ToString();
+                        fBeneficio.Condicion = rdr["CONDICION"].ToString();
                         lstBeneficios.Add(item: fBeneficio);
                     }
 

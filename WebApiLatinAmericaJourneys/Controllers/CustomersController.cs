@@ -77,9 +77,13 @@ namespace WebApiLatinAmericaJourneys.Controllers
 
         }
 
+        /*************************************************************************************************************************/
+        /*************************************************************************************************************************/
+        #region  INICIO DEL PROCESO DE OBTENER ITINERARIO DE VIAJE
+       
         [HttpPost]
         [Route("GetPropuesta")]
-        public IHttpActionResult GetPropuesta(PropuestaRequest Pro) 
+        public IHttpActionResult GetPropuesta(PropuestaRequest Pro)
         {
             LPropuesta objPropuesta = new LPropuesta();
             var lstPropuesta = objPropuesta.LeerPropuesta(Convert.ToInt32(Pro.CodCliente), Pro.ZontaVenta);
@@ -92,7 +96,7 @@ namespace WebApiLatinAmericaJourneys.Controllers
             }
             else
             {
-               
+
                 var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
                     Content = new StringContent("No se encontro la Propuesta.")
@@ -100,7 +104,7 @@ namespace WebApiLatinAmericaJourneys.Controllers
                 throw new HttpResponseException(message);
             }
 
-            
+
 
         }
 
@@ -109,7 +113,7 @@ namespace WebApiLatinAmericaJourneys.Controllers
         public IHttpActionResult GetItinerario(EItinerario Iti)
         {
             LItinerario objItinerario = new LItinerario();
-            var lstItinerario = objItinerario.LeerItinerario(Iti.NroPedido, Iti.NroPropuesta,Iti.NroVersion);
+            var lstItinerario = objItinerario.LeerItinerario(Iti.NroPedido, Iti.NroPropuesta, Iti.NroVersion);
 
             if (lstItinerario.Count() > 0)
             {
@@ -127,13 +131,13 @@ namespace WebApiLatinAmericaJourneys.Controllers
 
                 throw new HttpResponseException(message);
             }
-            
+
 
         }
 
         [HttpPost]
         [Route("GetURL")]
-        public IHttpActionResult GetURL(ClienteRequest cli) 
+        public IHttpActionResult GetURL(ClienteRequest cli)
         {
             string URL = Data.StrUrl;
 
@@ -144,13 +148,13 @@ namespace WebApiLatinAmericaJourneys.Controllers
 
             if (lstCliente.Count() > 0)
             {
-                 
+
                 objClienteRS.IDCliente = lstCliente.FirstOrDefault().IDCliente;
                 URL = URL + "/" + objClienteRS.IDCliente;
             }
             else
             {
-                
+
                 var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
                     Content = new StringContent("No se encontro el IDcliente.")
@@ -163,6 +167,43 @@ namespace WebApiLatinAmericaJourneys.Controllers
         }
 
         [HttpPost]
+        [Route("GetImageTour")]
+        public IHttpActionResult GetImageTour(PlantillaTourRequest Pla)
+        {
+
+
+            PlantillaTourResponse objPlantillaTour = new PlantillaTourResponse();
+            LoginAccess objPlantilla = new LoginAccess();
+
+            var lstImagenTour = objPlantilla.LeeImageTour(Int32.Parse(Pla.NroPedido), Int32.Parse(Pla.NroPropuesta), Int32.Parse(Pla.NroVersion));
+
+            if (lstImagenTour.Count() > 0)
+            {
+
+                return Ok(lstImagenTour.ToList());
+
+            }
+            else
+            {
+
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("No se encontro la Plantilla para el Tour.")
+                };
+
+                throw new HttpResponseException(message);
+            }
+
+        }
+
+        // FIN DEL PROCESO DE OBTENER ITINERARIO DE VIAJE
+        #endregion
+
+        /*************************************************************************************************************************/
+        /*************************************************************************************************************************/
+        #region INICIO DEL PROCESO DE RECUPERACION DE CONTRASEÑA
+    
+        [HttpPost]
         [Route("GetAcceso")]
         public IHttpActionResult GetAcceso(AccesoRequest acc)
         {
@@ -173,9 +214,9 @@ namespace WebApiLatinAmericaJourneys.Controllers
 
             if (lstCliente.Count() > 0)
             {
-                
+
                 objClienteRS.ClaveCliente = lstCliente.FirstOrDefault().ClaveCliente.Trim();
-                
+
                 acc.Cuerpo = acc.Cuerpo + " " + objClienteRS.ClaveCliente;
 
                 EnviarCorreoSendGrid(acc.NombreEmisor, acc.EmailEmisor, acc.EmailCliente, acc.Asunto, acc.Cuerpo);
@@ -250,36 +291,14 @@ namespace WebApiLatinAmericaJourneys.Controllers
 
         }
 
-        [HttpPost]
-        [Route("GetImageTour")]
-        public IHttpActionResult GetImageTour(PlantillaTourRequest Pla)
-        {
+        // ------------FIN DEL PROCESO DE RECUPERACION DE CONTRASEÑA
 
+        #endregion
 
-            PlantillaTourResponse objPlantillaTour = new PlantillaTourResponse();
-            LoginAccess objPlantilla = new LoginAccess();
+        /*************************************************************************************************************************/
+        /*************************************************************************************************************************/
+        #region INICIO  PROYECTO FASE I DE ITINERARIO Y CALIFICACION DE VIAJE CON LAS NUEVAS ESPECIFICACIONES
 
-            var lstImagenTour = objPlantilla.LeeImageTour(Int32.Parse(Pla.NroPedido),Int32.Parse(Pla.NroPropuesta),Int32.Parse(Pla.NroVersion));
-
-            if (lstImagenTour.Count() > 0)
-            {
-
-                return Ok(lstImagenTour.ToList());
-
-            }
-            else
-            {
-
-                var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent("No se encontro la Plantilla para el Tour.")
-                };
-
-                throw new HttpResponseException(message);
-            }
-
-        }
-        
         [HttpPost]
         [Route("GetPropuestaViaje")]
         public IHttpActionResult GetPropuestaViaje(PropuestaRequest Pro)
@@ -328,7 +347,7 @@ namespace WebApiLatinAmericaJourneys.Controllers
             LCalifica objCalifica = new LCalifica();
             List<CalificaResponse> lstToken = new List<CalificaResponse>();
 
-            var Registro = objCalifica.RegistrarCalificaViaje(Int32.Parse(Cal.NroPedido), Int32.Parse(Cal.NroPropuesta), Int32.Parse(Cal.NroVersion),Int32.Parse(Cal.Stars),Cal.Comment);
+            var Registro = objCalifica.RegistrarCalificaViaje(Int32.Parse(Cal.NroPedido), Int32.Parse(Cal.NroPropuesta), Int32.Parse(Cal.NroVersion), Int32.Parse(Cal.Stars), Cal.Comment);
 
             if (Registro.Registro > 0)
             {
@@ -350,7 +369,7 @@ namespace WebApiLatinAmericaJourneys.Controllers
                 var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
                     //Content = new StringContent("No se ha registro la Califica, Verifique por favor.")
-                    Content= new StringContent(Registro.Status)
+                    Content = new StringContent(Registro.Status)
                 };
 
                 throw new HttpResponseException(message);
@@ -358,25 +377,27 @@ namespace WebApiLatinAmericaJourneys.Controllers
 
         }
 
-        //************************************************************************************************************************
-        //************************************************************************************************************************
-        //DIVISION PARA IDENTIFICAR  LOS METODOS PARA LA NUEVA FUNCIONALIDAD DE LA MEMBRESIA WALLET  2704/2020 JLFA DESARROLLADOR
-        //************************************************************************************************************************
-
         [HttpPost]
-        [Route("GetLogin")]
-        public IHttpActionResult GetLogin(LoginWRequest Acc)
+        [Route("GetFotoRegistro")]
+        public IHttpActionResult GetFotoRegistro(FotoRegistroRequest Cal)
         {
-            Llogin objLoginW = new Llogin();
-            //List<LoginWResponse> lstLogin = new List<LoginWResponse>();
+            LFotoRegistro objCalifica = new LFotoRegistro();
+            List<FotoRegistroResponse> lstToken = new List<FotoRegistroResponse>();
 
-            var lstPropuesta = objLoginW.LeerUsuario(Acc.Uid,Acc.Pass);
+            var Registro = objCalifica.RegistrarFoto(Int32.Parse(Cal.NroPedido), Int32.Parse(Cal.NroPropuesta), Int32.Parse(Cal.NroVersion), Int32.Parse(Cal.Stars), Cal.Comment);
 
-            if (lstPropuesta.Count() > 0)
+            if (Registro.status == "ok")
             {
-                ////lstLogin = lstPropuesta.ToList();
 
-                return Ok(lstPropuesta);
+                FotoRegistroResponse fToken = new FotoRegistroResponse
+                {
+                    status = Registro.status
+                };
+
+                lstToken.Add(item: fToken);
+
+                return Ok(lstToken.FirstOrDefault());
+
 
             }
             else
@@ -384,8 +405,10 @@ namespace WebApiLatinAmericaJourneys.Controllers
 
                 var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
-                    Content = new StringContent("No se encontro la Propuesta.")
+                    //Content = new StringContent("No se ha registro la Califica, Verifique por favor.")
+                    Content = new StringContent(Registro.status)
                 };
+
                 throw new HttpResponseException(message);
             }
 
@@ -393,12 +416,80 @@ namespace WebApiLatinAmericaJourneys.Controllers
 
 
         [HttpPost]
+        [Route("GetFotoConsulta")]
+        public IHttpActionResult GetFotoConsulta(FotoConsultaRequest Pro)
+        {
+           
+            LFotoConsulta objItinerario = new LFotoConsulta();
+            FotoConsultaResponse objTourResponse = new FotoConsultaResponse();
+
+            var lstItinerario = objItinerario.LeeFotoConsulta(Int32.Parse(Pro.NroPedido), Int32.Parse(Pro.NroPropuesta), Int32.Parse(Pro.NroVersion));
+
+            if (lstItinerario.Count() > 0)
+            {
+                objTourResponse.Fotos = lstItinerario.ToList();
+                return Ok(objTourResponse);
+            }
+            else
+            {
+
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("No se encontro la lista de Fotos.")
+                };
+                throw new HttpResponseException(message);
+            }
+
+        }
+
+        // FIN DEL PROCESO DE ITINERARIO DE VIAJE CON LAS NUEVAS ESPECIFICACIONES
+        #endregion
+
+        //************************************************************************************************************************/
+
+
+        //************************************************************************************************************************/
+        //DIVISION PARA IDENTIFICAR  LOS METODOS PARA LA NUEVA FUNCIONALIDAD DE LA MEMBRESIA WALLET  27/04/2020 JLFA DESARROLLADOR
+        //************************************************************************************************************************/
+        #region INICIO DEL PROCESO DE MEMBRESIA WALLET 
+
+        [HttpPost]
+        [Route("GetLogin")]
+        public IHttpActionResult GetLogin(LoginWRequest Acc)
+        {
+            Llogin objLoginW = new Llogin();
+
+            var lstLogin = objLoginW.LeerUsuario(Acc.Uid, Acc.Pass);
+
+            if (lstLogin.Count() > 0)
+            {
+                return Ok(lstLogin);
+            }
+            if (lstLogin.Count() == 0)
+            {
+                return Ok(lstLogin);
+            }
+            else
+            {
+
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("Ingrese su usuario y clave correctos")
+                };
+                throw new HttpResponseException(message);
+            }
+
+        }
+
+        [HttpPost]
         [Route("GetWallet")]
         public IHttpActionResult GetWallet(WalletRequest Wall)
         {
             LWallet objWallet = new LWallet();
-            
+            WalletResponse respWallet = new WalletResponse();
+
             var lstWallet = objWallet.LeerWallet(Wall.User_id);
+
 
             if (lstWallet.Count() > 0)
             {
@@ -421,12 +512,14 @@ namespace WebApiLatinAmericaJourneys.Controllers
         public IHttpActionResult GetBeneficios(BeneficiosRequest Ben)
         {
             LBeneficios objBeneficios = new LBeneficios();
+            BeneficiosResponse objBeneficiosRes = new BeneficiosResponse();
 
             var lstBeneficios = objBeneficios.LeerBeneficios(Ben.User_id);
+            objBeneficiosRes.Beneficios = lstBeneficios.ToList();
 
             if (lstBeneficios.Count() > 0)
             {
-                return Ok(lstBeneficios);
+                return Ok(objBeneficiosRes);
             }
             else
             {
@@ -445,8 +538,13 @@ namespace WebApiLatinAmericaJourneys.Controllers
         public IHttpActionResult GetEncuesta(EncuestaRequest Enc)
         {
             LEncuesta objEncuesta = new LEncuesta();
+            EncuestaResponse objMarcado = new EncuestaResponse();
 
-            var lstEncuestas = objEncuesta.LeerEncuesta(Enc.User_id,Enc.Pregunta,Enc.Respuesta);
+            foreach (Marcado p in Enc.Marcado.ToList())
+            {
+                objEncuesta.RegistrarEncuesta(Enc.User_id, p.Pregunta, p.Respuesta);
+            }
+            var lstEncuestas = objEncuesta.LeerEncuesta(Enc.User_id);
 
             if (lstEncuestas.Count() > 0)
             {
@@ -457,7 +555,7 @@ namespace WebApiLatinAmericaJourneys.Controllers
 
                 var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
-                    Content = new StringContent("No se encontra Los Beneficios registrados.")
+                    Content = new StringContent("Lo sentimos vuelve a intentar mas adelante.")
                 };
                 throw new HttpResponseException(message);
             }
@@ -469,8 +567,22 @@ namespace WebApiLatinAmericaJourneys.Controllers
         public IHttpActionResult GetNuevoViaje(NuevoViajeRequest Nev)
         {
             LNuevoViaje objNuevoViaje = new LNuevoViaje();
+            NuevoViajeResponse objNViaje = new NuevoViajeResponse();
 
-            var lstNuevoViaje = objNuevoViaje.LeerNuevoViaje(Nev.User_id, Nev.Planes, Nev.Fecha,Nev.Nombre,Nev.Edad);
+            var CodViaje = objNuevoViaje.RegistrarNuevoViaje(Nev.User_id, Nev.Planes, Nev.Fecha);
+
+            foreach (Incluye p in Nev.Incluye.ToList())
+            {
+                objNuevoViaje.RegistrarViajeros(Convert.ToString(CodViaje), p.Nombre, p.ApPaterno, p.ApMaterno, p.Edad);
+            }
+
+            NuevoViajeResponse fencuesta = new NuevoViajeResponse();
+            List<NuevoViajeResponse> lstNuevoViaje = new List<NuevoViajeResponse>();
+
+            fencuesta.Status = "OK";
+            fencuesta.Idsol = Convert.ToString(CodViaje);
+
+            lstNuevoViaje.Add(item: fencuesta);
 
             if (lstNuevoViaje.Count() > 0)
             {
@@ -481,15 +593,19 @@ namespace WebApiLatinAmericaJourneys.Controllers
 
                 var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
-                    Content = new StringContent("No se encontra Los Beneficios registrados.")
+                    Content = new StringContent("Verificar no se ha registrado.")
                 };
                 throw new HttpResponseException(message);
             }
 
         }
+        
+        
+        // FIN DEL  PROCESO DE MEMBRESIA WALLET 
+        #endregion
 
-        //************************************************************************************************************************
-        //************************************************************************************************************************
+        //************************************************************************************************************************/
+        //************************************************************************************************************************/
 
 
 

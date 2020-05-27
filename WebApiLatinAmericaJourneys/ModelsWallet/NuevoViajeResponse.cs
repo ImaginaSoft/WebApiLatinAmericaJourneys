@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebApiLatinAmericaJourneys.ModelsWallet
 {
-    public class NUevoViajeResponse
+    public class NuevoViajeResponse
     {
         public string Status { get; set; }
         public string Idsol { get; set; }

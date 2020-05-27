@@ -11,7 +11,7 @@ namespace WebApiLatinAmericaJourneys.ModelsWallet
         public string Pregunta { get; set; }
         public string Respuesta { get; set; }
 
-        //public List<Marcado> Marcado { get; set; }
+        public List<Marcado> Marcado { get; set; }
 
     }
     public class Marcado

@@ -21,9 +21,9 @@ namespace WebApiLatinAmericaJourneys.Repository.Wallet
                 using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
                 {
 
-                    SqlCommand cmd = new SqlCommand("latinamericajourneys.LAJ_Wallet_S", con);
+                    SqlCommand cmd = new SqlCommand("dbo.APP_ObtieneWalletSaldo_S", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@User_id", SqlDbType.VarChar).Value = pUser_id;
+                    cmd.Parameters.Add("@CodCliente", SqlDbType.VarChar).Value = pUser_id;
                     
                     lineagg += ",2";
                     con.Open();
@@ -64,9 +64,9 @@ namespace WebApiLatinAmericaJourneys.Repository.Wallet
                 using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
                 {
 
-                    SqlCommand cmd = new SqlCommand("latinamericajourneys.LAJ_Wallet_S", con);
+                    SqlCommand cmd = new SqlCommand("dbo.APP_ObtieneWallet_S", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@User_id", SqlDbType.Int).Value = pUser_id;
+                    cmd.Parameters.Add("@CodCliente", SqlDbType.Int).Value = pUser_id;
                     lineagg += ",2";
                     con.Open();
                     cmd.ExecuteNonQuery();
@@ -100,5 +100,7 @@ namespace WebApiLatinAmericaJourneys.Repository.Wallet
             }
 
         }
+
+
     }
 }

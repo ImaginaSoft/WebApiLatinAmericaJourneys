@@ -141,7 +141,11 @@
     <Compile Include="Models\ClienteRequest.cs" />
     <Compile Include="Models\ClienteResponse.cs" />
     <Compile Include="Models\EItinerario.cs" />
+    <Compile Include="Models\FotoConsultaResponse.cs" />
+    <Compile Include="Models\FotoConsultaRequest .cs" />
+    <Compile Include="Models\FotoRegistroResponse.cs" />
     <Compile Include="Models\ItinerarioResponse.cs" />
+    <Compile Include="Models\FotoRegistroRequest.cs" />
     <Compile Include="Models\PlantillaTourRequest.cs" />
     <Compile Include="Models\PlantillaTourResponse.cs" />
     <Compile Include="Models\PropuestaRequest.cs" />
@@ -155,7 +159,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Data\Data.cs" />
     <Compile Include="Repository\LatinAmericaJourneys\FichaPropuestaAccess.cs" />
+    <Compile Include="Repository\LatinAmericaJourneys\LFotoConsulta.cs" />
     <Compile Include="Repository\LatinAmericaJourneys\LItinerario.cs" />
+    <Compile Include="Repository\LatinAmericaJourneys\LFotoRegistro.cs" />
     <Compile Include="Repository\LatinAmericaJourneys\LoginAccess.cs" />
     <Compile Include="Repository\LatinAmericaJourneys\LCalifica.cs" />
     <Compile Include="Repository\LatinAmericaJourneys\LPropuesta.cs" />

@@ -10,15 +10,13 @@ namespace WebApiLatinAmericaJourneys.ModelsWallet
         public string User_id { get; set; }
         public string Planes { get; set; }
         public string Fecha { get; set; }
-        public string Nombre { get; set; }
-        public string Edad { get; set; }
-
-        //public List<Incluye> Incluye { get; set; }
+        public List<Incluye> Incluye { get; set; }
     }
     public class Incluye
     {
         public string Nombre { get; set; }
+        public string ApPaterno { get; set; }
+        public string ApMaterno { get; set; }
         public string Edad { get; set; }
-
     }
 }

@@ -177,12 +177,9 @@ namespace WebApiLatinAmericaJourneys.Repository.Wallet
 
         public IEnumerable<LoginWResponse> LeerUsuario(string pUid, string pPass)
         {
-
             string lineagg = "0";
-
             try
             {
-
                 List<LoginWResponse> lstLogin = new List<LoginWResponse>();
                 //List<Lugares> lstLugares = new List<Lugares>();
                 //List<Actividades> lstActividades = new List<Actividades>();
@@ -191,13 +188,15 @@ namespace WebApiLatinAmericaJourneys.Repository.Wallet
                 using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
                 {
 
-                    SqlCommand cmd = new SqlCommand("latinamericajourneys.LAJ_Login_S", con);
+                    SqlCommand cmd = new SqlCommand("dbo.APP_ObtieneAccesos_S", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@Uid", SqlDbType.VarChar).Value = pUid;
-                    cmd.Parameters.Add("@Pass", SqlDbType.VarChar).Value = pPass;
+                    cmd.Parameters.Add("@CodUsuario", SqlDbType.VarChar).Value = pUid;
+                    cmd.Parameters.Add("@Password", SqlDbType.VarChar).Value = pPass;
+                   
                     lineagg += ",2";
                     con.Open();
                     cmd.ExecuteNonQuery();
+
                     SqlDataReader rdr = cmd.ExecuteReader();
                     lineagg += ",3";
                     while (rdr.Read())
@@ -205,20 +204,12 @@ namespace WebApiLatinAmericaJourneys.Repository.Wallet
                         lineagg += ",4";
                         LoginWResponse fLogin = new LoginWResponse();
 
-                        fLogin.Status = rdr["status"].ToString();
+                        fLogin.Status = rdr["pStatus"].ToString();
                         fLogin.Msg = rdr["msg"].ToString();
                         fLogin.Perfil = new List<Perfil>();
 
                         var ListaPerfiles = LeerPerfil(pUid, pPass);
                         fLogin.Perfil.AddRange(ListaPerfiles);
-
-                        //foreach (var item in fitinerario.Lugares)
-                        //{
-                        //    var strLugar = item.Lugar;
-                        //    item.Actividades = new List<Actividades>();
-                        //    var ListaActividades = LeerItinerarioActividad(Int32.Parse(pNroPedido), Int32.Parse(pNroPropuesta), Int32.Parse(pNroVersion), Int32.Parse(fitinerario.AnioInicio), Int32.Parse(fitinerario.MesInicio), Int32.Parse(fitinerario.DiaInicio), strLugar);
-                        //    item.Actividades.AddRange(ListaActividades);
-                        //}
                         lstLogin.Add(item: fLogin);
                     }
 
@@ -244,11 +235,11 @@ namespace WebApiLatinAmericaJourneys.Repository.Wallet
                 using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
                 {
 
-                    SqlCommand cmd = new SqlCommand("latinamericajourneys.LAJ_Login_S", con);
+                    SqlCommand cmd = new SqlCommand("dbo.APP_ObtieneAccesos_S", con);
 
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@Uid", SqlDbType.Int).Value = pUid;
-                    cmd.Parameters.Add("@Pass", SqlDbType.Int).Value = pPass;
+                    cmd.Parameters.Add("@CodUsuario", SqlDbType.VarChar).Value = pUid;
+                    cmd.Parameters.Add("@Password", SqlDbType.VarChar).Value = pPass;
                 
                     lineagg += ",2";
                     con.Open();
@@ -261,7 +252,7 @@ namespace WebApiLatinAmericaJourneys.Repository.Wallet
 
                         Perfil fPerfil = new Perfil
                         {
-                            Id = rdr["id"].ToString(),
+                            Id = rdr["ID"].ToString(),
                             Nombre = rdr["Nombre"].ToString(),
                             Apellidos = rdr["Apellidos"].ToString(),
                             Saldo = rdr["Saldo"].ToString(),

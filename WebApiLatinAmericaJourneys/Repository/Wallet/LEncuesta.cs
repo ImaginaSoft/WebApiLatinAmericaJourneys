@@ -12,9 +12,11 @@ namespace WebApiLatinAmericaJourneys.Repository.Wallet
 {
     public class LEncuesta
     {
-        public IEnumerable<EncuestaResponse> LeerEncuesta(string pUser_id,string pPregunta, string pRespuesta )
+        public IEnumerable<EncuestaResponse> LeerEncuesta(string pUser_id )
         {
             string lineagg = "0";
+            string demo1 = "";
+            string demo2 = "";
             try
             {
                 List<EncuestaResponse> lstEncuesta = new List<EncuestaResponse>();
@@ -22,25 +24,23 @@ namespace WebApiLatinAmericaJourneys.Repository.Wallet
                 using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
                 {
 
-                    SqlCommand cmd = new SqlCommand("latinamericajourneys.LAJ_Encuesta_S", con);
+                    SqlCommand cmd = new SqlCommand("dbo.APP_LeerRespuestaPregunta_S", con);
+
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@User_id", SqlDbType.VarChar).Value = pUser_id;
-                    cmd.Parameters.Add("@Pregunta", SqlDbType.VarChar).Value = pPregunta;
-                    cmd.Parameters.Add("@Respuesta", SqlDbType.VarChar).Value = pRespuesta;
+                    cmd.Parameters.Add("@MsgTrans", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("@MsgRespuesta", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("@CodCliente", SqlDbType.Int).Value = pUser_id;
+                   
                     lineagg += ",2";
                     con.Open();
                     cmd.ExecuteNonQuery();
-                    SqlDataReader rdr = cmd.ExecuteReader();
-                    lineagg += ",3";
-                    while (rdr.Read())
-                    {
-                        lineagg += ",4";
-                        EncuestaResponse fencuesta = new EncuestaResponse();
+                    demo1 = cmd.Parameters["@MsgTrans"].Value.ToString();
+                    demo2 = cmd.Parameters["@MsgRespuesta"].Value.ToString();
 
-                        fencuesta.Status = rdr["Status"].ToString();
-                        fencuesta.Msg = rdr["Msg"].ToString();
-                        lstEncuesta.Add(item: fencuesta);
-                    }
+                    EncuestaResponse fencuesta = new EncuestaResponse();
+                    fencuesta.Status = demo1;
+                    fencuesta.Msg = demo2;
+                    lstEncuesta.Add(item: fencuesta);
 
                     lineagg += ",5";
                     con.Close();
@@ -53,6 +53,44 @@ namespace WebApiLatinAmericaJourneys.Repository.Wallet
             }
 
         }
-      
+
+        public string RegistrarEncuesta(string pUser_id, string pPregunta, string pRespuesta)
+        {
+           string lineagg = "0";
+           string Status = "";
+            try
+            {
+                List<CalificaRequest> lstPropuesta = new List<CalificaRequest>();
+                lineagg += ",1";
+                using (SqlConnection con = new SqlConnection(Data.Data.StrCnx_WebsSql))
+                {
+                    SqlCommand cmd = new SqlCommand("dbo.APP_PreguntaRespUsuario_I", con);
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@MsgTrans", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("@pCodCliente", SqlDbType.Int).Value = pUser_id;
+                    cmd.Parameters.Add("@pIdPregunta", SqlDbType.Int).Value = pPregunta;
+                    cmd.Parameters.Add("@pRespuesta", SqlDbType.Char).Value = pRespuesta;
+
+                    lineagg += ",2";
+                    con.Open();
+
+                    cmd.ExecuteNonQuery();
+
+                    Status = cmd.Parameters["@MsgTrans"].Value.ToString();
+
+                    con.Close();
+                }
+                lineagg += ",5";
+
+                return Status;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+        }
+
     }
 }
