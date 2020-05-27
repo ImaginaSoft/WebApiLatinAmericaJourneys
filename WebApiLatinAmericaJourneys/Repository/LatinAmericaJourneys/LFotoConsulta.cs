@@ -29,9 +29,9 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
                     SqlCommand cmd = new SqlCommand("dbo.APP_ImagenAlbum_L", con);
 
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@NroPedido", SqlDbType.Int).Value = pNroPedido;
-                    cmd.Parameters.Add("@NroPropuesta", SqlDbType.Int).Value = pNroPropuesta;
-                    cmd.Parameters.Add("@NroVersion", SqlDbType.Int).Value = pNroVersion;
+                    cmd.Parameters.Add("@pNroPedido", SqlDbType.Int).Value = pNroPedido;
+                    cmd.Parameters.Add("@pNroPropuesta", SqlDbType.Int).Value = pNroPropuesta;
+                    cmd.Parameters.Add("@pNroVersion", SqlDbType.Int).Value = pNroVersion;
                     cmd.Parameters.Add("@MsgTrans", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
                     lineagg += ",2";
                     con.Open();
