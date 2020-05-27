@@ -384,9 +384,9 @@ namespace WebApiLatinAmericaJourneys.Controllers
             LFotoRegistro objCalifica = new LFotoRegistro();
             List<FotoRegistroResponse> lstToken = new List<FotoRegistroResponse>();
 
-            var Registro = objCalifica.RegistrarFoto(Int32.Parse(Cal.NroPedido), Int32.Parse(Cal.NroPropuesta), Int32.Parse(Cal.NroVersion), Int32.Parse(Cal.Stars), Cal.Comment);
+            var Registro = objCalifica.RegistrarFoto(Int32.Parse(Cal.NroPedido), Int32.Parse(Cal.NroPropuesta), Int32.Parse(Cal.NroVersion), Cal.Fototitulo, Cal.Fotocomment, Cal.Fotocontent);
 
-            if (Registro.status == "ok")
+            if (Registro.status == "OK")
             {
 
                 FotoRegistroResponse fToken = new FotoRegistroResponse

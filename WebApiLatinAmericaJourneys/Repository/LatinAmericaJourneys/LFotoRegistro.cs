@@ -5,6 +5,7 @@ using System.Web;
 using System.Data.SqlClient;
 using System.Data;
 using WebApiLatinAmericaJourneys.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
 {
@@ -31,15 +32,15 @@ namespace WebApiLatinAmericaJourneys.Repository.LatinAmericaJourneys
                     cmd.Parameters.Add("@pNroPedido", SqlDbType.Int).Value = pNropedido;
                     cmd.Parameters.Add("@pNroPropuesta", SqlDbType.Int).Value = pNroPropuesta;
                     cmd.Parameters.Add("@pNroVersion", SqlDbType.Int).Value = pNroVersion;
-                    cmd.Parameters.Add("@pFotoTitulo", SqlDbType.VarChar).Value = pFototitulo;
-                    cmd.Parameters.Add("@pFotoComment", SqlDbType.VarChar).Value = pFotocomment;
-                    cmd.Parameters.Add("@pFotoConent", SqlDbType.VarChar).Value = pFotocontent;
+                    cmd.Parameters.Add("@pFotoTitulo", SqlDbType.VarChar, 50).Value = pFototitulo;
+                    cmd.Parameters.Add("@pFotoComment", SqlDbType.VarChar, 50).Value = pFotocomment;
+                    cmd.Parameters.Add("@pFotoConent", SqlDbType.VarChar, 8000).Value = pFotocontent;
                     cmd.Parameters.Add("@MsgTrans", SqlDbType.VarChar, 250).Direction = ParameterDirection.Output;
 
                     lineagg += ",2";
                     con.Open();
 
-                    //Foto.Registro = cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
                     Foto.status = cmd.Parameters["@MsgTrans"].Value.ToString();
 
                     con.Close();
